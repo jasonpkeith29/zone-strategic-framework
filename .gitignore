@@ -1,0 +1,12 @@
+# Generated deck artifacts — committed per team preference
+# Remove these lines if you want .pptx in version control
+teams/*/deck/*.pptx
+
+# Python
+__pycache__/
+*.pyc
+.env
+
+# OS
+.DS_Store
+Thumbs.db

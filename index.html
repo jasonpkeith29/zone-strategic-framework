@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zone Strategic Plan — Backbone Framework</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; background: #f4f5f7; color: #1a1a2e; }
+  .page { max-width: 900px; margin: 0 auto; padding: 40px 32px; }
+
+  .header { background: linear-gradient(135deg, #1a1a2e 0%, #2d2b55 100%); color: white; padding: 44px 40px; border-radius: 12px; margin-bottom: 32px; }
+  .header .eyebrow { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: #9c88d4; margin-bottom: 10px; }
+  .header h1 { font-size: 28px; font-weight: 700; line-height: 1.2; margin-bottom: 8px; }
+  .header p { font-size: 14px; color: #b0bec5; max-width: 620px; line-height: 1.6; }
+
+  .section-label { display: flex; align-items: center; gap: 10px; margin: 32px 0 16px; }
+  .section-badge { background: #1a1a2e; color: white; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; padding: 4px 10px; border-radius: 20px; white-space: nowrap; }
+  .section-line { flex: 1; height: 1px; background: #dde1e7; }
+
+  .intro-note { background: #ede9fe; border-left: 4px solid #7c3aed; border-radius: 0 8px 8px 0; padding: 16px 20px; margin-bottom: 24px; }
+  .intro-note p { font-size: 13px; color: #4c1d95; line-height: 1.6; }
+  .intro-note strong { color: #3b0764; }
+
+  .section-block { background: white; border-radius: 10px; border: 1px solid #e4e7ec; margin-bottom: 16px; overflow: hidden; }
+  .section-header { display: flex; align-items: flex-start; gap: 16px; padding: 20px 24px; border-bottom: 1px solid #f0f2f5; }
+  .section-num { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800; color: white; flex-shrink: 0; }
+  .section-title-wrap { flex: 1; }
+  .section-title { font-size: 15px; font-weight: 700; color: #1a1a2e; margin-bottom: 2px; }
+  .section-sub { font-size: 12px; color: #78909c; }
+  .tag-keep { background: #dcfce7; color: #166534; font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 20px; margin-left: 8px; }
+  .tag-new { background: #fef3c7; color: #92400e; font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 20px; margin-left: 8px; }
+  .tag-elevate { background: #dbeafe; color: #1e40af; font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 20px; margin-left: 8px; }
+
+  .section-body { padding: 16px 24px 20px; }
+  .section-body p { font-size: 13px; color: #546e7a; line-height: 1.65; margin-bottom: 12px; }
+  .section-body p:last-child { margin-bottom: 0; }
+
+  .includes { margin-top: 10px; }
+  .includes-label { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #90a4ae; margin-bottom: 8px; }
+  .prompt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .prompt-item { background: #f8f9fb; border-radius: 6px; padding: 10px 12px; font-size: 12px; color: #37474f; display: flex; gap: 8px; line-height: 1.4; }
+  .prompt-item::before { content: "›"; color: #7c3aed; font-weight: 700; flex-shrink: 0; }
+
+  .baseline { background: #f0fdf4; border-radius: 8px; padding: 12px 16px; margin-top: 12px; display: flex; gap: 10px; }
+  .baseline p { font-size: 12px; color: #166534; line-height: 1.5; margin: 0; }
+  .baseline strong { color: #14532d; }
+
+  .missing { background: #fef2f2; border-radius: 8px; padding: 12px 16px; margin-top: 12px; display: flex; gap: 10px; }
+  .missing p { font-size: 12px; color: #991b1b; line-height: 1.5; margin: 0; }
+  .missing strong { color: #7f1d1d; }
+
+  .callout { background: #e0f2fe; border-radius: 8px; padding: 12px 16px; margin-top: 12px; display: flex; gap: 10px; }
+  .callout p { font-size: 12px; color: #0369a1; line-height: 1.5; margin: 0; }
+  .callout strong { color: #0c4a6e; }
+
+  .story-block { background: white; border-radius: 10px; border: 2px solid #7c3aed; margin-bottom: 16px; overflow: hidden; }
+  .story-header { background: #7c3aed; padding: 16px 24px; display: flex; align-items: center; gap: 12px; }
+  .story-header h3 { color: white; font-size: 14px; font-weight: 700; }
+  .story-body { padding: 16px 24px 20px; }
+
+  .story-principle { display: flex; gap: 14px; margin-bottom: 14px; align-items: flex-start; }
+  .story-principle:last-child { margin-bottom: 0; }
+  .sp-num { width: 24px; height: 24px; background: #ede9fe; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; color: #7c3aed; flex-shrink: 0; margin-top: 1px; }
+  .sp-content h4 { font-size: 13px; font-weight: 700; color: #1a1a2e; margin-bottom: 3px; }
+  .sp-content p { font-size: 12px; color: #546e7a; line-height: 1.5; margin: 0; }
+
+  .dryrun-block { background: white; border-radius: 10px; border: 2px solid #0284c7; margin-bottom: 16px; overflow: hidden; }
+  .dryrun-header { background: #0284c7; padding: 16px 24px; display: flex; align-items: center; gap: 12px; }
+  .dryrun-header h3 { color: white; font-size: 14px; font-weight: 700; }
+  .dryrun-body { padding: 16px 24px 20px; }
+
+  .stage { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+  .stage-card { border-radius: 8px; overflow: hidden; border: 1px solid #e4e7ec; }
+  .stage-head { padding: 10px 14px; font-size: 12px; font-weight: 700; color: white; }
+  .stage-body { padding: 12px 14px; background: #f8f9fb; }
+  .stage-body ul { list-style: none; margin: 0; padding: 0; }
+  .stage-body ul li { font-size: 12px; color: #37474f; padding: 3px 0; display: flex; gap: 6px; line-height: 1.4; }
+  .stage-body ul li::before { content: "→"; color: #0284c7; flex-shrink: 0; }
+
+  .feedback-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .feedback-card { background: #f0f9ff; border-radius: 8px; padding: 12px 14px; }
+  .feedback-card h4 { font-size: 12px; font-weight: 700; color: #0369a1; margin-bottom: 6px; }
+  .feedback-card p { font-size: 12px; color: #0c4a6e; line-height: 1.5; margin: 0; }
+
+  .summary-table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+  .summary-table th { background: #f8f9fb; font-size: 11px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; color: #78909c; padding: 10px 14px; text-align: left; border-bottom: 1px solid #e4e7ec; }
+  .summary-table td { font-size: 12px; color: #37474f; padding: 10px 14px; border-bottom: 1px solid #f0f2f5; vertical-align: top; line-height: 1.5; }
+  .summary-table tr:last-child td { border-bottom: none; }
+
+  .legend { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 20px; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #546e7a; }
+  .legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
+  .why-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding: 24px 28px; }
+  .why-item { display: flex; gap: 14px; align-items: flex-start; }
+  .why-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+  .why-title { font-size: 13px; font-weight: 700; color: #1a1a2e; margin-bottom: 4px; }
+  .why-text { font-size: 12px; color: #546e7a; line-height: 1.6; }
+
+  .arc-step { display: flex; align-items: center; gap: 10px; }
+  .arc-num { width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; }
+  .arc-row { flex: 1; border-radius: 6px; padding: 8px 12px; display: flex; justify-content: space-between; align-items: center; }
+  .arc-title { font-size: 12px; font-weight: 700; }
+  .arc-sub { font-size: 11px; margin-top: 2px; }
+  .arc-label { font-size: 10px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; white-space: nowrap; margin-left: 12px; }
+  .arc-connector { width: 26px; text-align: center; font-size: 14px; color: #D3D1C7; line-height: 1; }
+
+  .three-tests { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+  .test-card { border-radius: 6px; padding: 10px 12px; }
+  .test-title { font-size: 11px; font-weight: 700; margin-bottom: 3px; }
+  .test-text { font-size: 11px; line-height: 1.4; }
+
+  @media (max-width: 640px) {
+    .prompt-grid, .stage, .feedback-grid, .why-grid, .three-tests { grid-template-columns: 1fr; }
+  }
+
+  /* ── TAB NAV ── */
+  .tab-nav { display: flex; gap: 0; border-bottom: 2px solid #e4e7ec; margin-bottom: 32px; overflow-x: auto; }
+  .tab-btn { padding: 12px 20px; font-size: 13px; font-weight: 600; color: #78909c; background: transparent; border: none; border-bottom: 3px solid transparent; cursor: pointer; font-family: inherit; white-space: nowrap; margin-bottom: -2px; transition: all .15s; }
+  .tab-btn:hover { color: #1a1a2e; }
+  .tab-btn.active { color: #7c3aed; border-bottom-color: #7c3aed; }
+  .tab-pane { display: none; }
+  .tab-pane.active { display: block; }
+
+  /* ── TRACKER ── */
+  .tracker-team { background: white; border-radius: 10px; border: 1px solid #e4e7ec; margin-bottom: 16px; overflow: hidden; }
+  .tracker-team-header { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; border-bottom: 1px solid #f0f2f5; cursor: pointer; }
+  .tracker-team-name { font-size: 14px; font-weight: 700; color: #1a1a2e; }
+  .tracker-meta { font-size: 12px; color: #78909c; }
+  .tracker-pct { font-size: 18px; font-weight: 800; color: #7c3aed; font-family: "Iowan Old Style", Georgia, serif; }
+  .tracker-bar-wrap { height: 4px; background: #f0f2f5; }
+  .tracker-bar-fill { height: 100%; background: #7c3aed; transition: width .4s; }
+  .tracker-sections { padding: 12px 20px 16px; display: flex; flex-direction: column; gap: 6px; }
+  .tracker-row { display: flex; align-items: center; gap: 10px; font-size: 12px; }
+  .tracker-row-label { flex: 1; color: #546e7a; }
+  .tracker-status { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 999px; white-space: nowrap; }
+  .ts-locked { background: #f1f5f9; color: #94a3b8; }
+  .ts-notstarted { background: #f8f9fb; color: #b0bec5; }
+  .ts-inprogress { background: #fef3c7; color: #92400e; }
+  .ts-ready { background: #dbeafe; color: #1e40af; }
+  .ts-approved { background: #dcfce7; color: #166534; }
+  .tracker-sign-off { display: flex; gap: 8px; padding: 0 20px 16px; }
+  .sign-off-chip { font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 999px; }
+  .soc-pending { background: #fef2f2; color: #991b1b; }
+  .soc-done { background: #dcfce7; color: #166534; }
+  .tracker-intro { background: white; border-radius: 10px; border: 1px solid #e4e7ec; padding: 20px 24px; margin-bottom: 24px; }
+  .tracker-intro p { font-size: 13px; color: #546e7a; line-height: 1.65; }
+  .tracker-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 24px; }
+  .tracker-stat { background: white; border: 1px solid #e4e7ec; border-radius: 8px; padding: 16px; text-align: center; }
+  .tracker-stat-val { font-size: 1.8rem; font-weight: 800; color: #1a1a2e; font-family: "Iowan Old Style", Georgia, serif; line-height: 1; }
+  .tracker-stat-lbl { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: #90a4ae; margin-top: 4px; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER — always visible -->
+  <div class="header">
+    <div class="eyebrow">Data &amp; Analytics Platform · Zone Leadership</div>
+    <h1>Zone Strategic Plan<br>Backbone Framework</h1>
+    <p>A consistent structure for all zone strategic plans, covering the plan itself, the story that brings it to life, and the process for rehearsing it until the team is ready for the real room.</p>
+  </div>
+
+  <!-- TAB NAV -->
+  <div class="tab-nav">
+    <button class="tab-btn active" onclick="showTab('framework', this)">The Plan</button>
+    <button class="tab-btn" onclick="showTab('story', this)">The Story</button>
+    <button class="tab-btn" onclick="showTab('enter', this)">Enter the Experience</button>
+  </div>
+
+  <div class="tab-pane active" id="tab-framework">
+
+  <!-- CONTEXT BANNER -->
+  <div style="background:linear-gradient(135deg,#0f172a,#1e3a5f); border-radius:12px; padding:24px 28px; margin-bottom:20px; display:flex; gap:20px; align-items:flex-start;">
+    <div style="font-size:22px; flex-shrink:0; margin-top:2px;">📋</div>
+    <div>
+      <div style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#93c5fd;margin-bottom:8px;">Context &amp; Purpose</div>
+      <div style="font-size:16px;font-weight:700;color:white;line-height:1.4;margin-bottom:10px;">Preparing the Zone for 2027 Reviews with Executive Leadership</div>
+      <div style="font-size:13px;color:#cbd5e1;line-height:1.7;">The Data &amp; Analytics Platform Zone is preparing for 2027 strategic plan reviews with Paul (CPO), Richard (CTO), and senior leadership. This exercise ensures every team enters those conversations with a plan that is rigorous, consistent, and compelling — grounded in strategic focus, enabled workflows, and measurable outcomes. The shared framework, coaching process, and structured dry runs exist so that each team — and the Zone as a whole — puts its best foot forward when it counts.</div>
+    </div>
+  </div>
+
+  <!-- WHY WE'RE DOING THIS -->
+  <div style="background:white; border-radius:12px; border:1px solid #e4e7ec; margin-bottom:32px; overflow:hidden;">
+    <div style="background:linear-gradient(135deg,#7c3aed,#4f46e5); padding:20px 28px;">
+      <div style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#c4b5fd;margin-bottom:6px;">Why We're Doing This</div>
+      <div style="font-size:18px;font-weight:700;color:white;line-height:1.3;">This isn't a reporting exercise.<br>It's a capability investment.</div>
+    </div>
+    <div class="why-grid">
+      <div class="why-item">
+        <div class="why-icon" style="background:#ede9fe;">🧠</div>
+        <div>
+          <div class="why-title">Sharpen Strategic Thinking</div>
+          <div class="why-text">We are building the muscle to think beyond the immediate backlog and to form a clear point of view on where our areas need to go, why, and what it will take to get there. Strong operators become strategic leaders by practicing this, repeatedly.</div>
+        </div>
+      </div>
+      <div class="why-item">
+        <div class="why-icon" style="background:#dbeafe;">🤝</div>
+        <div>
+          <div class="why-title">Improve Cross-Team Collaboration</div>
+          <div class="why-text">When every zone is working from the same framework and presenting to each other, we build a shared language, surface dependencies earlier, and stop making decisions in silos. The dry run process is as much about connection as it is about preparation.</div>
+        </div>
+      </div>
+      <div class="why-item">
+        <div class="why-icon" style="background:#dcfce7;">🎤</div>
+        <div>
+          <div class="why-title">Show Up Ready in the Room</div>
+          <div class="why-text">Our teams do great work. They should be able to walk into any senior leadership conversation and represent that work with confidence, clarity, and conviction. That doesn't happen by accident. It happens through preparation, reps, and honest feedback before it counts.</div>
+        </div>
+      </div>
+      <div class="why-item">
+        <div class="why-icon" style="background:#fef3c7;">🏥</div>
+        <div>
+          <div class="why-title">Stay Grounded in the User</div>
+          <div class="why-text">Our users are both external — clinicians, billing managers, practice administrators — and internal — the analysts, product teams, and engineers who depend on our data platforms and pipelines to do their work. Both matter equally. When we plan without starting from their reality, we drift. This framework keeps every user at the center of every decision, year over year.</div>
+        </div>
+      </div>
+    </div>
+    <div style="background:#f8f9fb;border-top:1px solid #e4e7ec;padding:16px 28px;">
+      <div style="font-size:13px;color:#37474f;line-height:1.7;"><strong style="color:#1a1a2e;">The bottom line:</strong> A team that thinks strategically, collaborates openly, communicates with conviction, and stays anchored to the people it serves will consistently outperform one that doesn't. Regardless of how good the engineering is. This is how we build that team.</div>
+    </div>
+  </div>
+
+  <!-- LEGEND -->
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#166534"></div> Keep — preserve what works</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#92400e"></div> Elevate — deepen or reposition</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#1e40af"></div> New — add this</div>
+  </div>
+
+  <!-- PART 1: THE PLAN -->
+  <div class="section-label"><div class="section-badge">Part 1 · The Plan</div><div class="section-line"></div></div>
+
+  <div class="intro-note" style="background:#f0fdf4;border-color:#16a34a;">
+    <p style="color:#14532d;"><strong>Narrative arc — every plan follows this sequence:</strong> Lock the north star first. Then set the scene, ground in user reality, make the strategic bet, size the investment, show the sequence, define winning, be honest about risk, prove it out with detail.</p>
+  </div>
+
+  <!-- NARRATIVE ARC -->
+  <div style="background:white;border-radius:10px;border:1px solid #e4e7ec;padding:20px;margin-bottom:16px;">
+    <div style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#90a4ae;margin-bottom:14px;">Narrative Arc · 8 Sections</div>
+    <div style="display:flex;flex-direction:column;gap:6px;">
+
+      <div class="arc-step">
+        <div class="arc-num" style="background:#fdf4ff;border:1px solid #d946ef;color:#86198f;">0</div>
+        <div class="arc-row" style="background:#fdf4ff;border:1px solid #d946ef;">
+          <div><div class="arc-title" style="color:#86198f;">North Star &amp; Business Case</div><div class="arc-sub" style="color:#a21caf;">SCR narrative, governing thought, end state, WWHTBT — the anchor for every section that follows</div></div>
+          <div class="arc-label" style="color:#c026d3;">Lock the goalposts</div>
+        </div>
+      </div>
+      <div class="arc-connector">↓</div>
+
+      <div class="arc-step">
+        <div class="arc-num" style="background:#EEEDFE;border:1px solid #AFA9EC;color:#3C3489;">1</div>
+        <div class="arc-row" style="background:#EEEDFE;border:1px solid #AFA9EC;">
+          <div><div class="arc-title" style="color:#3C3489;">Strategic context</div><div class="arc-sub" style="color:#534AB7;">Mission, trends, zone purpose — why this work matters right now</div></div>
+          <div class="arc-label" style="color:#7F77DD;">Set the scene</div>
+        </div>
+      </div>
+      <div class="arc-connector">↓</div>
+
+      <div class="arc-step">
+        <div class="arc-num" style="background:#FAECE7;border:1px solid #F0997B;color:#712B13;">2</div>
+        <div class="arc-row" style="background:#FAECE7;border:1px solid #F0997B;">
+          <div><div class="arc-title" style="color:#712B13;">Who we serve &amp; what they need</div><div class="arc-sub" style="color:#993C1D;">Current workflows, target workflows, and the delta — the mandate for every bet</div></div>
+          <div class="arc-label" style="color:#993C1D;">Ground in reality</div>
+        </div>
+      </div>
+      <div class="arc-connector">↓</div>
+
+      <div class="arc-step">
+        <div class="arc-num" style="background:#E1F5EE;border:1px solid #5DCAA5;color:#085041;">3</div>
+        <div class="arc-row" style="background:#E1F5EE;border:1px solid #5DCAA5;">
+          <div><div class="arc-title" style="color:#085041;">Strategic focus areas &amp; key initiatives</div><div class="arc-sub" style="color:#0F6E56;">2–3 thematic bets tied to user pain, with cross-team impact named</div></div>
+          <div class="arc-label" style="color:#0F6E56;">Make the bet</div>
+        </div>
+      </div>
+      <div class="arc-connector">↓</div>
+
+      <div class="arc-step">
+        <div class="arc-num" style="background:#FAEEDA;border:1px solid #FAC775;color:#633806;">4</div>
+        <div class="arc-row" style="background:#FAEEDA;border:1px solid #FAC775;">
+          <div><div class="arc-title" style="color:#633806;">Investment, capacity &amp; expected return</div><div class="arc-sub" style="color:#854F0B;">Specific technical approach, LOE in sprints, quantified payoff</div></div>
+          <div class="arc-label" style="color:#854F0B;">Size it up</div>
+        </div>
+      </div>
+      <div class="arc-connector">↓</div>
+
+      <div class="arc-step">
+        <div class="arc-num" style="background:#E1F5EE;border:1px solid #5DCAA5;color:#085041;">5</div>
+        <div class="arc-row" style="background:#E1F5EE;border:1px solid #5DCAA5;">
+          <div><div class="arc-title" style="color:#085041;">Roadmap &amp; phasing</div><div class="arc-sub" style="color:#0F6E56;">Release-tagged, committed vs. not-committed, sequencing rationale</div></div>
+          <div class="arc-label" style="color:#0F6E56;">Show the sequence</div>
+        </div>
+      </div>
+      <div class="arc-connector">↓</div>
+
+      <div class="arc-step">
+        <div class="arc-num" style="background:#E6F1FB;border:1px solid #85B7EB;color:#0C447C;">6</div>
+        <div class="arc-row" style="background:#E6F1FB;border:1px solid #85B7EB;">
+          <div><div class="arc-title" style="color:#0C447C;">Success metrics</div><div class="arc-sub" style="color:#185FA5;">Baselines, leading &amp; lagging indicators, course-correction signals</div></div>
+          <div class="arc-label" style="color:#185FA5;">Define winning</div>
+        </div>
+      </div>
+      <div class="arc-connector">↓</div>
+
+      <div class="arc-step">
+        <div class="arc-num" style="background:#FAECE7;border:1px solid #F0997B;color:#712B13;">7</div>
+        <div class="arc-row" style="background:#FAECE7;border:1px solid #F0997B;">
+          <div><div class="arc-title" style="color:#712B13;">Risks, dependencies &amp; asks</div><div class="arc-sub" style="color:#993C1D;">What could derail the plan, impact map, explicit leadership asks</div></div>
+          <div class="arc-label" style="color:#993C1D;">Be honest</div>
+        </div>
+      </div>
+      <div class="arc-connector">↓</div>
+
+      <div class="arc-step">
+        <div class="arc-num" style="background:#F1EFE8;border:1px solid #B4B2A9;color:#444441;">8</div>
+        <div class="arc-row" style="background:#F1EFE8;border:1px solid #B4B2A9;">
+          <div><div class="arc-title" style="color:#444441;">OKR status &amp; operating metrics</div><div class="arc-sub" style="color:#5F5E5A;">Detail at the back — validates the story, does not lead it</div></div>
+          <div class="arc-label" style="color:#888780;">Prove it out</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:16px;padding-top:14px;border-top:1px solid #e4e7ec;">
+      <div style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#90a4ae;margin-bottom:10px;">Three tests every plan must pass</div>
+      <div class="three-tests">
+        <div class="test-card" style="background:#EEEDFE;">
+          <div class="test-title" style="color:#3C3489;">Story test</div>
+          <div class="test-text" style="color:#534AB7;">Can you tell it in 3 min without slides?</div>
+        </div>
+        <div class="test-card" style="background:#E1F5EE;">
+          <div class="test-title" style="color:#085041;">User test</div>
+          <div class="test-text" style="color:#0F6E56;">Is every initiative traceable to real pain?</div>
+        </div>
+        <div class="test-card" style="background:#FAEEDA;">
+          <div class="test-title" style="color:#633806;">Investment test</div>
+          <div class="test-text" style="color:#854F0B;">Can you defend the LOE against expected return?</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 0 -->
+  <div class="section-label"><div class="section-badge">Section 0</div><div class="section-line"></div></div>
+  <div class="section-block" style="border:2px solid #d946ef;">
+    <div class="section-header" style="background:#fdf4ff;">
+      <div class="section-num" style="background:#c026d3;">0</div>
+      <div class="section-title-wrap">
+        <div class="section-title">North Star &amp; Business Case <span class="tag-new">New</span></div>
+        <div class="section-sub">Start here — the anchor for every section that follows</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <p>This section exists to prevent the most common failure mode in strategic planning: teams completing months of work against an end state that was never explicitly agreed to, then discovering — too late — that leadership had a different picture of "success." Section 0 locks the goalposts. Every section that follows is traceable back to what is committed here.</p>
+      <div class="missing" style="background:#fdf4ff;border-left:4px solid #d946ef;margin-bottom:14px;">
+        <div style="font-size:16px;flex-shrink:0;">🎯</div>
+        <p style="color:#86198f;"><strong style="color:#6b21a8;">Why this comes first:</strong> When a project "isn't going as expected" or a team moves the goalposts mid-execution, it is almost always because the end state was never written down and agreed to. This section creates the anchor. Scope creep becomes visible. Expectation drift becomes arguable. If an assumption breaks, everyone knows it — because it was named here.</p>
+      </div>
+      <div class="includes">
+        <div class="includes-label">Five Required Components</div>
+        <div class="prompt-grid">
+          <div class="prompt-item"><strong>SCR Narrative</strong> — Situation, Complication, Resolution. Half page max. The complication must name <em>which users</em> bear the cost — internal (athenahealth teams, analysts, engineers) or external (providers, practice staff, patients) — and what specifically breaks for them if the zone doesn't move in 2027.</div>
+          <div class="prompt-item"><strong>Governing Thought</strong> — one sentence, specific, falsifiable. The claim the entire plan is organized around. Must be wrong-able: "we will make data more accessible" fails; "by end of 2027, every clinical workflow team will have self-serve sub-2s query access, eliminating the 3-day analyst bottleneck" passes.</div>
+          <div class="prompt-item"><strong>North Star End State</strong> — 3–5 outcome statements that are either true or false by December 2027. Not activities shipped, not features delivered. Each must name who benefits (internal user, external customer, or the business) and by how much. Use the five-dimension structure: user outcome · business impact · platform capability · strategic position (optional) · operating model (optional).</div>
+          <div class="prompt-item"><strong>Out of Scope</strong> — at least 2 things this plan explicitly does NOT address. If the plan focuses on internal users, name that external-facing outcomes are out of scope for 2027 and why. Naming tradeoffs proves real choices were made.</div>
+          <div class="prompt-item"><strong>What Would Have to Be True (WWHTBT)</strong> — 4–6 assumptions that must hold for the plan to succeed, each with a stated consequence if false. This is goalpost protection: when something goes sideways later, the conversation becomes "which assumption broke?" not "the plan failed."</div>
+        </div>
+      </div>
+      <div class="callout" style="margin-top:14px;">
+        <div style="font-size:16px;flex-shrink:0;">📌</div>
+        <p><strong>The north star is the anchor — write it carefully before moving to Section 1.</strong> Your manager can check in on your HTML site at any time. Share it with them and ask: "Does my complication name who bears the cost — internal teams or external customers? Is my governing thought specific enough to be wrong?" You decide when to move forward — but the bar is high.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 1 -->
+  <div class="section-label"><div class="section-badge">Section 1</div><div class="section-line"></div></div>
+  <div class="section-block">
+    <div class="section-header">
+      <div class="section-num" style="background:#7c3aed;">1</div>
+      <div class="section-title-wrap">
+        <div class="section-title">Strategic Context <span class="tag-new">New</span></div>
+        <div class="section-sub">Why this zone matters right now — connect to mission before anything else</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <p>Open with the world, not with the team. Connect the zone's work to what's changing in healthcare, data, and AI. Anchor it explicitly to "data as an advantage." Include a single, outcome-oriented zone purpose statement.</p>
+      <div class="includes">
+        <div class="includes-label">Must Include</div>
+        <div class="prompt-grid">
+          <div class="prompt-item">1–2 trends shaping the zone right now</div>
+          <div class="prompt-item">Connection to the "data as an advantage" platform mission</div>
+          <div class="prompt-item">Zone purpose statement — one sentence, outcome-oriented</div>
+          <div class="prompt-item">Where this zone sits in the broader platform ecosystem</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 2 -->
+  <div class="section-label"><div class="section-badge">Section 2</div><div class="section-line"></div></div>
+  <div class="section-block">
+    <div class="section-header">
+      <div class="section-num" style="background:#dc2626;">2</div>
+      <div class="section-title-wrap">
+        <div class="section-title">Who We Serve &amp; What They Need <span class="tag-new">New</span></div>
+        <div class="section-sub">Current workflows, target workflows, and the delta — not just pain points</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <p>For a platform team, the output is always something someone else uses. Pain points tell you what's broken today. <strong>Target workflows tell you what "good" looks like when you've done your job.</strong> Every strategic bet in Section 3 must trace to a specific gap between the current workflow and the target workflow defined here. If that traceability doesn't exist, the bet doesn't belong in the plan.</p>
+      <div class="includes">
+        <div class="includes-label">Per Persona — Three Required Components</div>
+        <div class="prompt-grid">
+          <div class="prompt-item"><strong>Current workflow</strong> — step by step. What do they actually do today? How many steps? How long? Where does it break down? Real friction, not categories.</div>
+          <div class="prompt-item"><strong>Target workflow</strong> — what the ideal looks like when the platform works excellently. Step by step. How many steps? How long? What can they do that they couldn't before? What do they no longer have to do?</div>
+          <div class="prompt-item"><strong>The delta</strong> — 2-3 specific gaps between current and target. These map directly to bets in Section 3. If a bet doesn't close a named delta, it doesn't belong.</div>
+          <div class="prompt-item"><strong>Verbatim quote</strong> — real, attributed to role/context. "It's hard to find data" fails. "I spend 45 minutes every Monday hunting the right dashboard before I can answer a single question from my attending" passes.</div>
+        </div>
+      </div>
+      <div style="background:#fff7ed;border-radius:8px;padding:12px 16px;margin-top:12px;display:flex;gap:10px;">
+        <div style="font-size:16px;flex-shrink:0;">🔗</div>
+        <div>
+          <div style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#92400e;margin-bottom:6px;">Workflow → Bet Traceability</div>
+          <div style="font-size:12px;color:#7c2d12;line-height:1.6;">Before moving to Section 3, map every planned bet to the delta it closes: "Bet [X] closes the gap for Persona [Y]: [which delta]." If a bet can't be traced to a named delta, either the bet doesn't belong or the target workflow isn't specific enough. Fix one before writing the other.</div>
+        </div>
+      </div>
+      <div class="baseline" style="margin-top:12px;">
+        <div style="font-size:16px;flex-shrink:0;margin-top:2px;">✅</div>
+        <p><strong style="color:#14532d;">Model to follow:</strong> The XCCM slide in the Migrations deck. Real customer quote, specific problem, hard evidence (10,000 hrs/month, 3x dev support increase). That pattern of quote plus problem plus evidence is the standard — now add the target workflow and delta to complete it.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 3 -->
+  <div class="section-label"><div class="section-badge">Section 3</div><div class="section-line"></div></div>
+  <div class="section-block">
+    <div class="section-header">
+      <div class="section-num" style="background:#d97706;">3</div>
+      <div class="section-title-wrap">
+        <div class="section-title">Strategic Focus Areas &amp; Key Initiatives <span class="tag-elevate">Elevate</span></div>
+        <div class="section-sub">2–3 thematic bets, not feature lists — each tied to a user pain</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <p>Organize work into 2–3 strategic themes. Under each, define 1–3 key initiatives. <strong>Each bet must explicitly close a workflow gap named in Section 2</strong> — not just reference a pain point, but name the specific delta between current and target workflow that this bet addresses. If a bet can't be traced to a workflow gap, it doesn't belong.</p>
+      <div class="includes">
+        <div class="includes-label">Per Initiative</div>
+        <div class="prompt-grid">
+          <div class="prompt-item">Plain-language description — what it is and why it matters</div>
+          <div class="prompt-item">Which workflow gap it closes — name the persona, the delta from Section 2, and how this bet bridges it</div>
+          <div class="prompt-item">Technical solution or approach, named specifically and framed as an enabler rather than a deliverable</div>
+          <div class="prompt-item">Expected outcome — user benefit and business impact</div>
+          <div class="prompt-item">Who else is impacted — internal teams, other zones, or external customers affected by this work, even if they don't own it</div>
+          <div class="prompt-item">What depends on others — work in other zones or subdivisions that must happen for this initiative to succeed</div>
+        </div>
+      </div>
+      <div class="callout">
+        <div style="font-size:16px;flex-shrink:0;">💡</div>
+        <p><strong>The full picture test:</strong> For every initiative, ask who finds out about this work when it ships rather than while it's being planned. If the answer is anyone, that's a coordination gap. Requirements written without accounting for upstream dependencies or downstream impacts are incomplete by definition.</p>
+      </div>
+      <div class="missing">
+        <div style="font-size:16px;flex-shrink:0;">⚠️</div>
+        <p><strong>Common failure mode to watch for:</strong> Technical details presented as OKRs or strategic outcomes. "POC on OGG for Postgres as an alternative to Debezium" is an engineering activity, not a strategic initiative. The correct framing is: "We are reducing pipeline ingestion overhead by 30% to support growing demand from internal teams." The technical approach (OGG vs. Debezium evaluation) is one sentence underneath it. The solution serves the outcome. It never replaces it.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 4 -->
+  <div class="section-label"><div class="section-badge">Section 4</div><div class="section-line"></div></div>
+  <div class="section-block">
+    <div class="section-header">
+      <div class="section-num" style="background:#b45309;">4</div>
+      <div class="section-title-wrap">
+        <div class="section-title">Investment, Capacity &amp; Expected Return <span class="tag-new">New</span></div>
+        <div class="section-sub">Every initiative must be sized — vague scope leads to vague investment decisions</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <p>Budget and capacity are not finance team concerns. They are product leadership concerns. If a plan cannot articulate what an initiative costs in engineering hours and what it is expected to return, it is not ready to be prioritized. This section does not require precise estimates. It requires honest ones.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin:14px 0;">
+        <div style="background:#f8f9fb;border-radius:8px;padding:14px 16px;border-top:3px solid #b45309;">
+          <div style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#92400e;margin-bottom:8px;">Technical Specificity</div>
+          <div style="font-size:12px;color:#37474f;line-height:1.6;">"Introducing AI and automation" is not a technical solution. Name the tool, the approach, and the scope. For example: "We are building an AI-powered mapping agent using Cortex, targeting the 3 highest-volume data types, reducing manual mapping time from 4 hours to under 30 minutes per project."</div>
+        </div>
+        <div style="background:#f8f9fb;border-radius:8px;padding:14px 16px;border-top:3px solid #0284c7;">
+          <div style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#1e40af;margin-bottom:8px;">Level of Effort</div>
+          <div style="font-size:12px;color:#37474f;line-height:1.6;">Estimate engineering hours or sprints per initiative. S / M / L is a floor, not a ceiling. Where possible, break LOE into phases: discovery, build, test, rollout. If the LOE is unknown, that itself is a signal. It means the initiative is not scoped enough to be on the roadmap yet.</div>
+        </div>
+        <div style="background:#f8f9fb;border-radius:8px;padding:14px 16px;border-top:3px solid #059669;">
+          <div style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#166534;margin-bottom:8px;">Expected Return</div>
+          <div style="font-size:12px;color:#37474f;line-height:1.6;">Quantify the return wherever possible: hours saved, error rate reduction, client retention risk mitigated, revenue enabled, pipeline reliability improved. If it is not quantifiable, frame it in terms of strategic value and explain what this unlocks that we cannot do today.</div>
+        </div>
+      </div>
+      <div class="includes">
+        <div class="includes-label">Required Per Initiative</div>
+        <div class="prompt-grid">
+          <div class="prompt-item">Specific technical approach — tool, method, and scope (not "AI and automation")</div>
+          <div class="prompt-item">Engineering LOE estimate — sprints or hours, phased where possible</div>
+          <div class="prompt-item">Other resource dependencies — UX, data engineering, cross-zone, external vendors</div>
+          <div class="prompt-item">Expected return — quantified outcome or clearly stated strategic unlock</div>
+          <div class="prompt-item">Downstream impact — which internal teams, zones, or external customers will be affected when this ships</div>
+          <div class="prompt-item">Upstream dependencies — what other teams must deliver for this initiative to succeed, and what the risk is if they don't</div>
+        </div>
+      </div>
+      <div style="background:#fff7ed;border-radius:8px;padding:14px 16px;margin-top:12px;">
+        <div style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#92400e;margin-bottom:8px;">The Vagueness Test</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <div>
+            <div style="font-size:11px;font-weight:700;color:#7c2d12;margin-bottom:6px;">Fails the test</div>
+            <div style="font-size:12px;color:#7c2d12;font-style:italic;line-height:1.6;">"Reduce operational effort from 50% to 30% by introducing AI and automation."</div>
+            <div style="font-size:12px;color:#92400e;margin-top:6px;line-height:1.5;">No tool named. No scope defined. No LOE. No return calculation. Cannot be prioritized or funded.</div>
+          </div>
+          <div>
+            <div style="font-size:11px;font-weight:700;color:#14532d;margin-bottom:6px;">Passes the test</div>
+            <div style="font-size:12px;color:#14532d;font-style:italic;line-height:1.6;">"Reduce developer time on manual alert triage from 50% to 30% by deploying an AI-powered alert classification agent (Cortex-based) targeting our top 3 noisy pipeline categories. Estimated LOE: 6 sprints across 2 engineers. Expected return: approx. 680 false alerts eliminated per quarter, freeing 1 FTE equivalent for feature work."</div>
+          </div>
+        </div>
+      </div>
+      <div class="callout" style="margin-top:12px;">
+        <div style="font-size:16px;flex-shrink:0;">💡</div>
+        <p><strong>If the LOE is unknown, say so explicitly</strong> and name it as a dependency that must be resolved before the initiative can be committed. An honest "we need 2 weeks of discovery to size this" is far stronger than a vague estimate that quietly inflates once work begins.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 5 -->
+  <div class="section-label"><div class="section-badge">Section 5</div><div class="section-line"></div></div>
+  <div class="section-block">
+    <div class="section-header">
+      <div class="section-num" style="background:#059669;">5</div>
+      <div class="section-title-wrap">
+        <div class="section-title">Roadmap &amp; Phasing <span class="tag-keep">Keep</span></div>
+        <div class="section-sub">Preserve existing format — add sequencing rationale</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <p>The release-tagged roadmap format with committed/not-committed distinction is strong. Keep it and standardize it across all zones. Add one thing: a brief sequencing rationale that explains why this order makes sense and what depends on what.</p>
+      <div class="includes">
+        <div class="includes-label">Must Include</div>
+        <div class="prompt-grid">
+          <div class="prompt-item">Phased view across releases — what ships when</div>
+          <div class="prompt-item">Committed vs. not-committed (already good across decks)</div>
+          <div class="prompt-item">1–2 sentence sequencing rationale per phase</div>
+          <div class="prompt-item">Cross-zone and cross-subdivision dependencies flagged explicitly</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 6 -->
+  <div class="section-label"><div class="section-badge">Section 6</div><div class="section-line"></div></div>
+  <div class="section-block">
+    <div class="section-header">
+      <div class="section-num" style="background:#0284c7;">6</div>
+      <div class="section-title-wrap">
+        <div class="section-title">Success Metrics <span class="tag-elevate">Elevate</span></div>
+        <div class="section-sub">Outcomes not outputs — with baselines, leading and lagging indicators</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <p>Separate metrics from the OKR status table and present them as a standalone success framework. Each initiative needs its own definition of success. Every metric needs a baseline. Without one, a target number is meaningless.</p>
+      <div class="includes">
+        <div class="includes-label">Must Include</div>
+        <div class="prompt-grid">
+          <div class="prompt-item">Leading indicators — early signals that things are working</div>
+          <div class="prompt-item">Lagging indicators — outcome metrics confirmed over time</div>
+          <div class="prompt-item">Baseline today — where we are before we start</div>
+          <div class="prompt-item">A "signal it's not working" metric — what triggers a course correction</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 7 -->
+  <div class="section-label"><div class="section-badge">Section 7</div><div class="section-line"></div></div>
+  <div class="section-block">
+    <div class="section-header">
+      <div class="section-num" style="background:#7c3aed;">7</div>
+      <div class="section-title-wrap">
+        <div class="section-title">Risks, Dependencies &amp; Asks <span class="tag-elevate">Elevate</span></div>
+        <div class="section-sub">Name what could derail the plan — and what you need to prevent it</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <p>Elevate the existing challenges sections by adding an explicit "Asks" column. Every plan presented to leadership should surface one or two decisions or resources the zone cannot move without. This is where a zone leader asserts a point of view rather than just reporting status.</p>
+      <div class="includes">
+        <div class="includes-label">Must Include</div>
+        <div class="prompt-grid">
+          <div class="prompt-item">Top 2–3 risks — specific, not generic</div>
+          <div class="prompt-item">Mitigation approach or status for each risk</div>
+          <div class="prompt-item">Cross-team dependencies with owners named, covering both what this zone needs from others and what others need from this zone</div>
+          <div class="prompt-item">Explicit asks — decisions or resources needed from leadership</div>
+          <div class="prompt-item">Impact map — which subdivisions, zones, or customer-facing products are downstream of this work and need to be in the loop</div>
+          <div class="prompt-item">Coordination plan — how and when affected teams will be engaged, not just notified</div>
+        </div>
+      </div>
+      <div class="missing">
+        <div style="font-size:16px;flex-shrink:0;">⚠️</div>
+        <p><strong>The "Asks" component is missing from all current decks.</strong> Challenges are surfaced but nothing is requested. A zone leader who identifies a risk and doesn't ask for what they need to resolve it leaves leadership with no action to take. Fix this.</p>
+      </div>
+      <div class="missing" style="background:#fff7ed;margin-top:8px;">
+        <div style="font-size:16px;flex-shrink:0;">⚠️</div>
+        <p style="color:#92400e;"><strong style="color:#7c2d12;">Cross-team impact is systematically underrepresented.</strong> Plans currently focus on what the zone owns, not what the zone's work touches. A platform team that ships without accounting for how Clinicals, Collector, Alicia's analytics team, or AES will be affected is writing incomplete requirements. The impact map is not optional.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 8 -->
+  <div class="section-label"><div class="section-badge">Section 8</div><div class="section-line"></div></div>
+  <div class="section-block">
+    <div class="section-header">
+      <div class="section-num" style="background:#475569;">8</div>
+      <div class="section-title-wrap">
+        <div class="section-title">OKR Status &amp; Operating Metrics <span class="tag-keep">Keep</span></div>
+        <div class="section-sub">Move to the back — detail supports the story, it doesn't lead it</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <p>Preserve the OKR table, operating principals, and wins/shoutouts. The only structural change is placement. These belong at the back. Leading with OKR status signals a reporting deck, not a strategic one. The story comes first; the detail validates it.</p>
+    </div>
+  </div>
+
+  <div style="text-align:center;padding:24px;font-size:12px;color:#90a4ae;">Data &amp; Analytics Platform · athenahealth · Zone Leadership Framework · 2026</div>
+
+  </div><!-- /tab-framework -->
+
+  <!-- STORY TAB -->
+  <div class="tab-pane" id="tab-story">
+
+  <!-- PART 2: THE STORY -->
+  <div class="section-label"><div class="section-badge">Part 2 · The Story</div><div class="section-line"></div></div>
+
+  <div class="intro-note">
+    <p><strong>The plan is the what. The story is the why it matters.</strong> A well-structured deck presented without narrative conviction will not move a leadership audience. Every zone leader must be able to tell their story without the deck. The slides exist to support the story, not replace it.</p>
+  </div>
+
+  <div class="story-block">
+    <div class="story-header">
+      <div style="font-size:18px;">🎯</div>
+      <h3>Storytelling Standards — What Good Looks Like</h3>
+    </div>
+    <div class="story-body">
+      <div class="story-principle">
+        <div class="sp-num">1</div>
+        <div class="sp-content">
+          <h4>Open with the tension, not the agenda</h4>
+          <p>Don't start with "today I'll walk you through..." Start with the problem or the opportunity that makes this work urgent. The first 60 seconds should make the audience lean in, not settle in. For example: "Practices are going live with data that's 12 to 24 weeks old. That's not a technical problem. That's a provider experience problem. Here's how we're fixing it."</p>
+        </div>
+      </div>
+      <div class="story-principle">
+        <div class="sp-num">2</div>
+        <div class="sp-content">
+          <h4>Anchor every strategic bet to a human moment</h4>
+          <p>Before presenting an initiative, name the person it's for and the moment it changes for them. For example: "Right now, a billing manager spends 3 hours a week running reports they don't fully trust. Here's what we're building so they don't have to." Data and features are forgettable. A person and a moment are not.</p>
+        </div>
+      </div>
+      <div class="story-principle">
+        <div class="sp-num">3</div>
+        <div class="sp-content">
+          <h4>Have a point of view — and state it clearly</h4>
+          <p>The plan should have a clear thesis the zone leader believes and is willing to defend. Not "here are our priorities" but "here's our bet and here's why it's the right one." If someone pushes back, the zone leader should be able to say "I hear that, and here's why I still think this is right" rather than retreat into the slides.</p>
+        </div>
+      </div>
+      <div class="story-principle">
+        <div class="sp-num">4</div>
+        <div class="sp-content">
+          <h4>Make the ask explicit and specific</h4>
+          <p>Every presentation to leadership should end with a clear ask: a decision needed, a dependency to unblock, a resource to approve. "We need alignment on X by Y date or the roadmap slips" is leadership-ready. "We're working through some challenges" is not. Zone leaders should practice stating the ask directly, without softening it.</p>
+        </div>
+      </div>
+      <div class="story-principle">
+        <div class="sp-num">5</div>
+        <div class="sp-content">
+          <h4>The deck is a prop — not a script</h4>
+          <p>Zone leaders should be able to close the laptop and tell the story. If they can't summarize their plan in 3 minutes without slides, the story isn't ready. Slides should add visual support and data credibility. They should never be the thing holding the presentation together.</p>
+        </div>
+      </div>
+      <div class="story-principle">
+        <div class="sp-num">6</div>
+        <div class="sp-content">
+          <h4>Anticipate the hard questions and answer them first</h4>
+          <p>Leadership will ask: Why this over something else? How do you know this is the right priority? What happens if it doesn't work? What do you need from us? Zone leaders should address these in the plan itself rather than wait to be asked. Answering the question before it's asked signals strategic maturity and builds credibility faster than any slide.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PART 3: DRY RUN -->
+  <div class="section-label"><div class="section-badge">Part 3 · The Dry Run Process</div><div class="section-line"></div></div>
+
+  <div class="intro-note" style="background:#e0f2fe;border-color:#0284c7;">
+    <p style="color:#0c4a6e;"><strong>No one walks into a high-stakes executive review cold.</strong> The dry run process exists to give every zone leader multiple reps in safe spaces before they're in the real room. The goal is not a perfect first draft. It's fluency and conviction by the time it counts.</p>
+  </div>
+
+  <div class="dryrun-block">
+    <div class="dryrun-header">
+      <div style="font-size:18px;">🔁</div>
+      <h3>Three-Stage Dry Run Process</h3>
+    </div>
+    <div class="dryrun-body">
+      <div class="stage">
+        <div class="stage-card">
+          <div class="stage-head" style="background:#475569;">Stage 1 · Own Team</div>
+          <div class="stage-body">
+            <p style="font-weight:700;color:#1a1a2e;margin-bottom:8px;font-size:12px;">Safe Space</p>
+            <ul>
+              <li>Present to your own team — PMs, POs, engineering leads</li>
+              <li>Goal: stress-test the plan foundation and story arc</li>
+              <li>Encourage honest pushback — does it hang together?</li>
+              <li>Director observes but does not lead the feedback</li>
+            </ul>
+          </div>
+        </div>
+        <div class="stage-card">
+          <div class="stage-head" style="background:#0284c7;">Stage 2 · Peer Zone</div>
+          <div class="stage-body">
+            <p style="font-weight:700;color:#1a1a2e;margin-bottom:8px;font-size:12px;">Constructive Challenge</p>
+            <ul>
+              <li>Present to the other zone's PM team (cross-zone swap)</li>
+              <li>Goal: test whether the story lands for a less familiar audience</li>
+              <li>Focus feedback on story clarity, prioritization rationale, and asks</li>
+              <li>Simulate real Q&amp;A — directors play devil's advocate</li>
+            </ul>
+          </div>
+        </div>
+        <div class="stage-card">
+          <div class="stage-head" style="background:#7c3aed;">Stage 3 · Leadership Preview</div>
+          <div class="stage-body">
+            <p style="font-weight:700;color:#1a1a2e;margin-bottom:8px;font-size:12px;">Pre-Flight Check</p>
+            <ul>
+              <li>Present to Jason (and optionally Bridget/Vijay)</li>
+              <li>Goal: final calibration before the real executive review</li>
+              <li>Structured debrief on content, story, and presence</li>
+              <li>Green light to proceed or one more round of refinement</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="includes-label" style="margin-bottom:10px;">Structured Feedback — What Reviewers Evaluate at Every Stage</div>
+      <div class="feedback-grid">
+        <div class="feedback-card">
+          <h4>📋 Plan Foundation</h4>
+          <p>Is it grounded in real user pain? Are the strategic bets clearly tied to that pain? Are tradeoffs named? Are the asks specific? Does the roadmap follow the strategy? Is the full cross-team impact accounted for, covering both what this zone needs from others and what others need from this zone?</p>
+        </div>
+        <div class="feedback-card">
+          <h4>📖 Story &amp; Narrative</h4>
+          <p>Does it open with tension? Is there a clear point of view? Can the presenter tell the story without the slides? Does it answer the hard questions before they're asked?</p>
+        </div>
+        <div class="feedback-card">
+          <h4>🎤 Presence &amp; Delivery</h4>
+          <p>Does the presenter own the room? Do they hold their position under pushback? Are they confident with the data? Do they connect with the audience, not the deck?</p>
+        </div>
+        <div class="feedback-card">
+          <h4>❓ Q&amp;A Readiness</h4>
+          <p>Can they answer: Why this over that? How do you know? What if it fails? What do you need? Answers should be crisp, grounded, and not require re-opening slides.</p>
+        </div>
+      </div>
+
+      <div class="callout" style="margin-top:14px;">
+        <div style="font-size:16px;flex-shrink:0;">💡</div>
+        <p><strong>Culture note for Stage 1 and 2:</strong> The psychological safety of these early stages is what makes them valuable. Zone leaders should be coached to frame the dry run explicitly with their teams as: "I want you to push on this. Tell me where it's weak. That's the job right now." Defensive responses to feedback in the safe stages are a signal worth noting.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUMMARY TABLE -->
+  <div class="section-label"><div class="section-badge">At a Glance · Full Standard</div><div class="section-line"></div></div>
+  <div class="section-block">
+    <div class="section-body" style="padding-top:16px;">
+      <table class="summary-table">
+        <tr>
+          <th>Component</th>
+          <th>Status</th>
+          <th>Key Change from Current State</th>
+        </tr>
+        <tr><td><strong>Plan · North Star &amp; Business Case</strong></td><td>Required · New</td><td>SCR narrative, governing thought, north star end state, WWHTBT — the anchor that every downstream section traces back to</td></tr>
+        <tr><td><strong>Plan · Context</strong></td><td>Required · New</td><td>Open with mission and trends before any status or roadmap content</td></tr>
+        <tr><td><strong>Plan · Who We Serve</strong></td><td>Required · New</td><td>Current workflow + target workflow + delta per persona; every bet must trace to a named workflow gap</td></tr>
+        <tr><td><strong>Plan · Strategic Initiatives</strong></td><td>Required · Elevate</td><td>Thematic bets with explicit user pain linkage, not feature lists</td></tr>
+        <tr><td><strong>Plan · Investment &amp; LOE</strong></td><td>Required · New</td><td>Specific technical approach, phased LOE, and quantified return per initiative</td></tr>
+        <tr><td><strong>Plan · Roadmap</strong></td><td>Required · Keep</td><td>Standardize format; add sequencing rationale across all zones</td></tr>
+        <tr><td><strong>Plan · Metrics</strong></td><td>Required · Elevate</td><td>Separate from OKR status; include baselines and leading/lagging split</td></tr>
+        <tr><td><strong>Plan · Risks &amp; Asks</strong></td><td>Required · Elevate</td><td>Add explicit asks and a cross-team impact map</td></tr>
+        <tr><td><strong>Plan · OKR Detail</strong></td><td>Required · Keep</td><td>Move to back of deck; detail supports the story, it does not open it</td></tr>
+        <tr><td><strong>Story · Opening</strong></td><td>Required · New</td><td>Open with tension, not agenda; make the audience lean in within 60 seconds</td></tr>
+        <tr><td><strong>Story · POV</strong></td><td>Required · New</td><td>Zone leader must be able to state and defend a clear strategic thesis</td></tr>
+        <tr><td><strong>Story · Deck independence</strong></td><td>Required · New</td><td>Can tell the story in 3 minutes without slides before any executive review</td></tr>
+        <tr><td><strong>Process · Stage 1 Dry Run</strong></td><td>Required</td><td>Own team: stress-test plan and story before any external audience</td></tr>
+        <tr><td><strong>Process · Stage 2 Dry Run</strong></td><td>Required</td><td>Peer zone: cross-zone presentation with structured Q&amp;A simulation</td></tr>
+        <tr><td><strong>Process · Stage 3 Preview</strong></td><td>Required</td><td>Leadership preview with Jason: green light before executive review</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div style="text-align:center;padding:24px;font-size:12px;color:#90a4ae;">Data &amp; Analytics Platform · athenahealth · Zone Leadership Framework · 2026</div>
+
+  </div><!-- /tab-story -->
+
+  <!-- ENTER THE EXPERIENCE TAB -->
+  <div class="tab-pane" id="tab-enter">
+
+    <div class="intro-note">
+      <p><strong>Before you begin:</strong> Read through <strong>The Plan</strong> and <strong>The Story</strong> tabs fully. The agent builds on what you've read — starting without that context will slow you down significantly. This exercise is individual, not team-based: you are building <em>your</em> strategic plan for your area.</p>
+    </div>
+
+    <div class="section-label"><div class="section-badge">The output</div><div class="section-line"></div></div>
+
+    <div style="background:white;border:1px solid #e4e7ec;border-radius:10px;padding:20px 24px;margin-bottom:16px">
+      <p style="font-size:13px;color:#546e7a;line-height:1.65;margin-bottom:12px">This exercise produces two things:</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div style="background:#f5f3ff;border:1px solid #ddd6fe;border-radius:8px;padding:16px 18px">
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#7c3aed;margin-bottom:6px">1. HTML site — the working document</div>
+          <p style="font-size:13px;color:#4c1d95;line-height:1.6;margin:0">Built section by section as you work through the exercise. Preview locally with <code>bash scripts/generate-site.sh teams/[your-name]</code>. This is the review artifact — your manager can check in on the rendered site at any time, not the markdown files.</p>
+        </div>
+        <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:16px 18px">
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#166534;margin-bottom:6px">2. PowerPoint deck — the final presentation</div>
+          <p style="font-size:13px;color:#14532d;line-height:1.6;margin:0">Generated once, at the end, when your plan is complete. Run <code>bash scripts/generate-deck.sh teams/[your-name]</code> to produce the <code>.pptx</code> for the August ELT presentation. Iterate on the HTML site — generate the deck only at the end.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-label"><div class="section-badge">The 9 sections</div><div class="section-line"></div></div>
+
+    <div style="background:white;border:1px solid #e4e7ec;border-radius:10px;overflow:hidden;margin-bottom:16px">
+      <table style="width:100%;border-collapse:collapse">
+        <thead><tr style="background:#f8f9fb"><th style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#78909c;padding:10px 16px;text-align:left;border-bottom:1px solid #e4e7ec">Section</th><th style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#78909c;padding:10px 16px;text-align:left;border-bottom:1px solid #e4e7ec">What it is</th><th style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#78909c;padding:10px 16px;text-align:left;border-bottom:1px solid #e4e7ec">The bar</th></tr></thead>
+        <tbody>
+          <tr style="border-bottom:1px solid #f0f2f5"><td style="padding:10px 16px;font-size:12px;font-weight:700;color:#7c3aed;white-space:nowrap">00 · North Star</td><td style="padding:10px 16px;font-size:12px;color:#37474f">SCR narrative (names who bears the cost — internal, external, or both), governing thought, 3–5 outcome-level end states, out of scope, WWHTBT assumptions</td><td style="padding:10px 16px;font-size:12px;color:#37474f">End states name who benefits (internal user, external customer, or the business) and by how much. Falsifiable without knowing what was built.</td></tr>
+          <tr style="border-bottom:1px solid #f0f2f5"><td style="padding:10px 16px;font-size:12px;font-weight:700;color:#546e7a;white-space:nowrap">01 · Context</td><td style="padding:10px 16px;font-size:12px;color:#37474f">Your area's mission, current state, market and product trends, what's at stake</td><td style="padding:10px 16px;font-size:12px;color:#37474f">Names what's measurably different in 18 months if your plan succeeds — not team activities, outcomes</td></tr>
+          <tr style="border-bottom:1px solid #f0f2f5"><td style="padding:10px 16px;font-size:12px;font-weight:700;color:#546e7a;white-space:nowrap">02 · Who We Serve</td><td style="padding:10px 16px;font-size:12px;color:#37474f">Named personas, current workflows, target workflows, pain points ranked, traceability table</td><td style="padding:10px 16px;font-size:12px;color:#37474f">Every bet in Section 3 must trace to a named persona and workflow gap here</td></tr>
+          <tr style="border-bottom:1px solid #f0f2f5"><td style="padding:10px 16px;font-size:12px;font-weight:700;color:#546e7a;white-space:nowrap">03 · Strategic Bets</td><td style="padding:10px 16px;font-size:12px;color:#37474f">2-4 bets with thesis, user pain, technical approach, expected outcome, tradeoff, failure signal</td><td style="padding:10px 16px;font-size:12px;color:#37474f">Each bet must name what you are NOT doing as a result</td></tr>
+          <tr style="border-bottom:1px solid #f0f2f5"><td style="padding:10px 16px;font-size:12px;font-weight:700;color:#546e7a;white-space:nowrap">04 · Investment</td><td style="padding:10px 16px;font-size:12px;color:#37474f">Sprint estimates by phase, headcount, return quantified</td><td style="padding:10px 16px;font-size:12px;color:#37474f">No "significant effort" — sprints broken into phases with quantified return</td></tr>
+          <tr style="border-bottom:1px solid #f0f2f5"><td style="padding:10px 16px;font-size:12px;font-weight:700;color:#546e7a;white-space:nowrap">05 · Roadmap</td><td style="padding:10px 16px;font-size:12px;color:#37474f">Phased timeline, committed vs. directional, sequencing rationale, named dependency owners</td><td style="padding:10px 16px;font-size:12px;color:#37474f">Nothing starts at the same time — explicit sequencing with reasons</td></tr>
+          <tr style="border-bottom:1px solid #f0f2f5"><td style="padding:10px 16px;font-size:12px;font-weight:700;color:#546e7a;white-space:nowrap">06 · Metrics</td><td style="padding:10px 16px;font-size:12px;color:#37474f">Success metrics per initiative with baseline, target, and 90-day failure signal</td><td style="padding:10px 16px;font-size:12px;color:#37474f">Every metric has a baseline with a source — no targets without current state</td></tr>
+          <tr style="border-bottom:1px solid #f0f2f5"><td style="padding:10px 16px;font-size:12px;font-weight:700;color:#546e7a;white-space:nowrap">07 · Risks & Asks</td><td style="padding:10px 16px;font-size:12px;color:#37474f">Specific risks with consequences, dependencies with named owners, leadership asks with deadlines</td><td style="padding:10px 16px;font-size:12px;color:#37474f">Asks must be decisions with dates — not FYIs</td></tr>
+          <tr><td style="padding:10px 16px;font-size:12px;font-weight:700;color:#546e7a;white-space:nowrap">08 · OKR Status</td><td style="padding:10px 16px;font-size:12px;color:#37474f">Current OKR status, at-risk items, recovery path, operating metrics</td><td style="padding:10px 16px;font-size:12px;color:#37474f">Honest about what's at risk — ELT respects truth over a clean dashboard</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section-label"><div class="section-badge">The three ELT tests</div><div class="section-line"></div></div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:16px">
+      <div style="background:white;border:1px solid #e4e7ec;border-radius:10px;padding:18px 20px;border-top:3px solid #7c3aed">
+        <div style="font-size:13px;font-weight:700;color:#1a1a2e;margin-bottom:6px">"So what?"</div>
+        <p style="font-size:12px;color:#546e7a;line-height:1.6;margin:0">Does this matter? Is the problem real and urgent? Is the opportunity significant enough to justify the investment?</p>
+      </div>
+      <div style="background:white;border:1px solid #e4e7ec;border-radius:10px;padding:18px 20px;border-top:3px solid #7c3aed">
+        <div style="font-size:13px;font-weight:700;color:#1a1a2e;margin-bottom:6px">"How do you know?"</div>
+        <p style="font-size:12px;color:#546e7a;line-height:1.6;margin:0">Is every claim grounded in evidence? User pain from real research. Market trends backed by data. ROI built from real estimates.</p>
+      </div>
+      <div style="background:white;border:1px solid #e4e7ec;border-radius:10px;padding:18px 20px;border-top:3px solid #7c3aed">
+        <div style="font-size:13px;font-weight:700;color:#1a1a2e;margin-bottom:6px">"Why you, why now, why this?"</div>
+        <p style="font-size:12px;color:#546e7a;line-height:1.6;margin:0">Has the plan made a real choice? Named what it's NOT doing? Can every bet be defended over a reasonable alternative?</p>
+      </div>
+    </div>
+
+    <div class="section-label"><div class="section-badge">Commit conventions</div><div class="section-line"></div></div>
+
+    <div style="background:white;border:1px solid #e4e7ec;border-radius:10px;overflow:hidden;margin-bottom:16px">
+      <table style="width:100%;border-collapse:collapse">
+        <tbody>
+          <tr style="border-bottom:1px solid #f0f2f5"><td style="padding:10px 16px;width:40%"><code style="font-size:12px;background:#f5f3ff;padding:3px 8px;border-radius:4px;color:#7c3aed">[READY] section-00 — description</code></td><td style="padding:10px 16px;font-size:12px;color:#546e7a">Employee signals section is complete</td></tr>
+          <tr style="border-bottom:1px solid #f0f2f5"><td style="padding:10px 16px"><code style="font-size:12px;background:#fef3c7;padding:3px 8px;border-radius:4px;color:#92400e">[REVISED] section-00 — addressed feedback</code></td><td style="padding:10px 16px;font-size:12px;color:#546e7a">Employee has revised after manager check-in</td></tr>
+          <tr style="border-bottom:1px solid #f0f2f5"><td style="padding:10px 16px"><code style="font-size:12px;background:#dcfce7;padding:3px 8px;border-radius:4px;color:#166534">[CHECKIN] section-00 — manager notes</code></td><td style="padding:10px 16px;font-size:12px;color:#546e7a">Manager has reviewed and left notes — not a gate, just input</td></tr>
+          <tr><td style="padding:10px 16px"><code style="font-size:12px;background:#f1f5f9;padding:3px 8px;border-radius:4px;color:#475569">[NOTE] brief description</code></td><td style="padding:10px 16px;font-size:12px;color:#546e7a">Employee or manager adds a note to dialogue.md mid-section</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section-label"><div class="section-badge">How to launch</div><div class="section-line"></div></div>
+
+    <!-- launch track toggle -->
+    <div style="display:flex;gap:8px;margin-bottom:16px">
+      <button id="lt-emp-btn" onclick="launchTrack('emp')" style="padding:8px 20px;font-size:13px;font-weight:600;border-radius:999px;border:2px solid #7c3aed;background:#7c3aed;color:white;cursor:pointer;font-family:inherit;transition:all .15s">Employee</button>
+      <button id="lt-mgr-btn" onclick="launchTrack('mgr')" style="padding:8px 20px;font-size:13px;font-weight:600;border-radius:999px;border:2px solid #e4e7ec;background:white;color:#78909c;cursor:pointer;font-family:inherit;transition:all .15s">Manager</button>
+    </div>
+
+    <!-- EMPLOYEE track -->
+    <div id="lt-emp" style="background:white;border:1px solid #e4e7ec;border-radius:10px;padding:24px;margin-bottom:24px">
+      <h4 style="font-size:14px;font-weight:700;color:#1a1a2e;margin-bottom:4px">Get into Claude Code — Employee</h4>
+      <p style="font-size:13px;color:#78909c;margin-bottom:20px">Five steps. Takes under 5 minutes the first time.</p>
+      <ol style="margin:0;padding-left:20px;display:flex;flex-direction:column;gap:16px">
+        <li>
+          <strong style="color:#1a1a2e">Open Terminal</strong>&nbsp;&nbsp;<span style="font-size:12px;color:#78909c">Mac: <code>⌘ Space</code> → type <em>Terminal</em> → Enter</span>
+        </li>
+        <li>
+          <strong style="color:#1a1a2e">Clone the repo</strong> <span style="font-size:12px;color:#78909c">(first time only)</span>
+          <div style="margin-top:8px;background:#f8f9fb;border:1px solid #e4e7ec;border-radius:6px;padding:10px 14px">
+            <code style="font-size:13px">git clone ssh://git@bitbucket.athenahealth.com:7999/~jakeith/strategic-framework-exercise.git ~/strategic-framework-exercise</code>
+          </div>
+          <span style="font-size:12px;color:#78909c">Already cloned? Skip this step.</span>
+        </li>
+        <li>
+          <strong style="color:#1a1a2e">Create your branch</strong> — name it after yourself
+          <div style="margin-top:8px;background:#f8f9fb;border:1px solid #e4e7ec;border-radius:6px;padding:10px 14px">
+            <code style="font-size:13px">cd ~/strategic-framework-exercise && git checkout -b employee/[your-name]</code>
+          </div>
+          <span style="font-size:12px;color:#78909c">Example: <code>employee/sagar-joshi</code>. Do this once — return to this branch for every session.</span>
+        </li>
+        <li>
+          <strong style="color:#1a1a2e">Launch Claude Code</strong>
+          <div style="margin-top:8px;background:#f8f9fb;border:1px solid #e4e7ec;border-radius:6px;padding:10px 14px">
+            <code style="font-size:13px">claude</code>
+          </div>
+          <span style="font-size:12px;color:#78909c">Command not found? Run <code>npm install -g @anthropic-ai/claude-code</code> first.</span>
+        </li>
+        <li>
+          <strong style="color:#1a1a2e">Paste this as your first message</strong> — fill in the blanks
+          <div style="margin-top:8px;background:#f8f9fb;border:1px solid #e4e7ec;border-radius:6px;padding:10px 14px">
+            <code style="font-size:12px;white-space:pre-wrap">I'm starting the strategic plan exercise. My name is [your name], my role is [your role], and my manager is [manager name]. This is my first session — I've read through the framework site and I'm ready to start Section 0.</code>
+          </div>
+          <span style="font-size:12px;color:#78909c">Returning? Say "pick up where we left off" and Claude will read your session log and section files.</span>
+        </li>
+      </ol>
+      <div style="margin-top:20px;background:#ede9fe;border:1px solid #c4b5fd;border-radius:8px;padding:14px 18px">
+        <p style="font-size:13px;color:#4c1d95;margin:0"><strong>No manual saving needed.</strong> At the end of every session, Claude automatically saves your progress and pushes it to the repo. Your manager can check in on your HTML site at any time — the tracker updates every morning at 9:30am.</p>
+      </div>
+    </div>
+
+    <!-- MANAGER track -->
+    <div id="lt-mgr" style="display:none;background:white;border:1px solid #e4e7ec;border-radius:10px;padding:24px;margin-bottom:24px">
+      <h4 style="font-size:14px;font-weight:700;color:#1a1a2e;margin-bottom:4px">Get into Claude Code — Manager</h4>
+      <p style="font-size:13px;color:#78909c;margin-bottom:20px">You don't need to be in every session — check in when the employee flags they're ready, or whenever you want to see where things stand.</p>
+      <ol style="margin:0;padding-left:20px;display:flex;flex-direction:column;gap:16px">
+        <li>
+          <strong style="color:#1a1a2e">Clone the repo and create your branch</strong> <span style="font-size:12px;color:#78909c">(first time only)</span>
+          <div style="margin-top:8px;background:#f8f9fb;border:1px solid #e4e7ec;border-radius:6px;padding:10px 14px">
+            <code style="font-size:13px">git clone ssh://git@bitbucket.athenahealth.com:7999/~jakeith/strategic-framework-exercise.git ~/strategic-framework-exercise && cd ~/strategic-framework-exercise && git checkout -b manager/[your-name]</code>
+          </div>
+          <span style="font-size:12px;color:#78909c">Already cloned? Just <code>cd ~/strategic-framework-exercise && git checkout manager/[your-name]</code>.</span>
+        </li>
+        <li>
+          <strong style="color:#1a1a2e">Launch Claude Code and identify yourself</strong>
+          <div style="margin-top:8px;background:#f8f9fb;border:1px solid #e4e7ec;border-radius:6px;padding:10px 14px">
+            <code style="font-size:12px;white-space:pre-wrap">I'm a manager reviewing a strategic plan. My name is [your name] and I'm reviewing [employee name]'s plan. Help me give section feedback.</code>
+          </div>
+        </li>
+        <li>
+          <strong style="color:#1a1a2e">To leave a check-in note</strong> — after reviewing, commit with the standard tag:
+          <div style="margin-top:8px;background:#f8f9fb;border:1px solid #e4e7ec;border-radius:6px;padding:10px 14px">
+            <code style="font-size:13px">git commit -m "[CHECKIN] section-00 — manager notes"</code>
+          </div>
+          <span style="font-size:12px;color:#78909c">The employee sees your notes at their next session. This is not an approval gate — the employee decides when to move forward.</span>
+        </li>
+      </ol>
+      <div style="margin-top:20px;background:#e0f2fe;border:1px solid #bae6fd;border-radius:8px;padding:14px 18px">
+        <p style="font-size:13px;color:#0c4a6e;margin:0"><strong>Track progress anytime.</strong> The manager dashboard shows every employee's section status, last session date, and open items — updated each morning at 9:30am. Access your dashboard at <code>manager.html</code> (the URL is the same as this page with <code>/manager.html</code> at the end — share it only with managers).</p>
+      </div>
+    </div>
+
+  </div><!-- /tab-enter -->
+
+</div>
+<script>
+// ── Tab navigation ──────────────────────────────────────────────────────────
+function showTab(id, btn) {
+  document.querySelectorAll('.tab-pane').forEach(function(p) { p.classList.remove('active'); });
+  document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ── Launch track toggle ──────────────────────────────────────────────────────
+function launchTrack(track) {
+  var isEmp = track === 'emp';
+  document.getElementById('lt-emp').style.display = isEmp ? 'block' : 'none';
+  document.getElementById('lt-mgr').style.display = isEmp ? 'none' : 'block';
+  var empBtn = document.getElementById('lt-emp-btn');
+  var mgrBtn = document.getElementById('lt-mgr-btn');
+  empBtn.style.background = isEmp ? '#7c3aed' : 'white';
+  empBtn.style.color = isEmp ? 'white' : '#78909c';
+  empBtn.style.borderColor = isEmp ? '#7c3aed' : '#e4e7ec';
+  mgrBtn.style.background = isEmp ? 'white' : '#7c3aed';
+  mgrBtn.style.color = isEmp ? '#78909c' : 'white';
+  mgrBtn.style.borderColor = isEmp ? '#e4e7ec' : '#7c3aed';
+}
+
+</script>
+</body>
+</html>

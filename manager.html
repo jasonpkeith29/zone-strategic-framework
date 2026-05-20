@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zone Strategic Plan — Manager Dashboard</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; background: #f4f5f7; color: #1a1a2e; }
+  .page { max-width: 900px; margin: 0 auto; padding: 40px 32px; }
+
+  .header { background: linear-gradient(135deg, #1a1a2e 0%, #2d2b55 100%); color: white; padding: 44px 40px; border-radius: 12px; margin-bottom: 32px; }
+  .header .eyebrow { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: #9c88d4; margin-bottom: 10px; }
+  .header h1 { font-size: 28px; font-weight: 700; line-height: 1.2; margin-bottom: 8px; }
+  .header p { font-size: 14px; color: #b0bec5; max-width: 620px; line-height: 1.6; }
+
+  .section-label { display: flex; align-items: center; gap: 10px; margin: 32px 0 16px; }
+  .section-badge { background: #1a1a2e; color: white; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; padding: 4px 10px; border-radius: 20px; white-space: nowrap; }
+  .section-line { flex: 1; height: 1px; background: #dde1e7; }
+
+  .intro-note { background: #ede9fe; border-left: 4px solid #7c3aed; border-radius: 0 8px 8px 0; padding: 16px 20px; margin-bottom: 24px; }
+  .intro-note p { font-size: 13px; color: #4c1d95; line-height: 1.6; }
+  .intro-note strong { color: #3b0764; }
+
+  .section-block { background: white; border-radius: 10px; border: 1px solid #e4e7ec; margin-bottom: 16px; overflow: hidden; }
+  .section-header { display: flex; align-items: flex-start; gap: 16px; padding: 20px 24px; border-bottom: 1px solid #f0f2f5; }
+  .section-num { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800; color: white; flex-shrink: 0; }
+  .section-title-wrap { flex: 1; }
+  .section-title { font-size: 15px; font-weight: 700; color: #1a1a2e; margin-bottom: 2px; }
+  .section-sub { font-size: 12px; color: #78909c; }
+  .tag-keep { background: #dcfce7; color: #166534; font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 20px; margin-left: 8px; }
+  .tag-new { background: #fef3c7; color: #92400e; font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 20px; margin-left: 8px; }
+  .tag-elevate { background: #dbeafe; color: #1e40af; font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 20px; margin-left: 8px; }
+
+  .section-body { padding: 16px 24px 20px; }
+  .section-body p { font-size: 13px; color: #546e7a; line-height: 1.65; margin-bottom: 12px; }
+  .section-body p:last-child { margin-bottom: 0; }
+
+  .includes { margin-top: 10px; }
+  .includes-label { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #90a4ae; margin-bottom: 8px; }
+  .prompt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .prompt-item { background: #f8f9fb; border-radius: 6px; padding: 10px 12px; font-size: 12px; color: #37474f; display: flex; gap: 8px; line-height: 1.4; }
+  .prompt-item::before { content: "›"; color: #7c3aed; font-weight: 700; flex-shrink: 0; }
+
+  .baseline { background: #f0fdf4; border-radius: 8px; padding: 12px 16px; margin-top: 12px; display: flex; gap: 10px; }
+  .baseline p { font-size: 12px; color: #166534; line-height: 1.5; margin: 0; }
+  .baseline strong { color: #14532d; }
+
+  .missing { background: #fef2f2; border-radius: 8px; padding: 12px 16px; margin-top: 12px; display: flex; gap: 10px; }
+  .missing p { font-size: 12px; color: #991b1b; line-height: 1.5; margin: 0; }
+  .missing strong { color: #7f1d1d; }
+
+  .callout { background: #e0f2fe; border-radius: 8px; padding: 12px 16px; margin-top: 12px; display: flex; gap: 10px; }
+  .callout p { font-size: 12px; color: #0369a1; line-height: 1.5; margin: 0; }
+  .callout strong { color: #0c4a6e; }
+
+  .story-block { background: white; border-radius: 10px; border: 2px solid #7c3aed; margin-bottom: 16px; overflow: hidden; }
+  .story-header { background: #7c3aed; padding: 16px 24px; display: flex; align-items: center; gap: 12px; }
+  .story-header h3 { color: white; font-size: 14px; font-weight: 700; }
+  .story-body { padding: 16px 24px 20px; }
+
+  .story-principle { display: flex; gap: 14px; margin-bottom: 14px; align-items: flex-start; }
+  .story-principle:last-child { margin-bottom: 0; }
+  .sp-num { width: 24px; height: 24px; background: #ede9fe; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; color: #7c3aed; flex-shrink: 0; margin-top: 1px; }
+  .sp-content h4 { font-size: 13px; font-weight: 700; color: #1a1a2e; margin-bottom: 3px; }
+  .sp-content p { font-size: 12px; color: #546e7a; line-height: 1.5; margin: 0; }
+
+  .dryrun-block { background: white; border-radius: 10px; border: 2px solid #0284c7; margin-bottom: 16px; overflow: hidden; }
+  .dryrun-header { background: #0284c7; padding: 16px 24px; display: flex; align-items: center; gap: 12px; }
+  .dryrun-header h3 { color: white; font-size: 14px; font-weight: 700; }
+  .dryrun-body { padding: 16px 24px 20px; }
+
+  .stage { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+  .stage-card { border-radius: 8px; overflow: hidden; border: 1px solid #e4e7ec; }
+  .stage-head { padding: 10px 14px; font-size: 12px; font-weight: 700; color: white; }
+  .stage-body { padding: 12px 14px; background: #f8f9fb; }
+  .stage-body ul { list-style: none; margin: 0; padding: 0; }
+  .stage-body ul li { font-size: 12px; color: #37474f; padding: 3px 0; display: flex; gap: 6px; line-height: 1.4; }
+  .stage-body ul li::before { content: "→"; color: #0284c7; flex-shrink: 0; }
+
+  .feedback-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .feedback-card { background: #f0f9ff; border-radius: 8px; padding: 12px 14px; }
+  .feedback-card h4 { font-size: 12px; font-weight: 700; color: #0369a1; margin-bottom: 6px; }
+  .feedback-card p { font-size: 12px; color: #0c4a6e; line-height: 1.5; margin: 0; }
+
+  .summary-table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+  .summary-table th { background: #f8f9fb; font-size: 11px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; color: #78909c; padding: 10px 14px; text-align: left; border-bottom: 1px solid #e4e7ec; }
+  .summary-table td { font-size: 12px; color: #37474f; padding: 10px 14px; border-bottom: 1px solid #f0f2f5; vertical-align: top; line-height: 1.5; }
+  .summary-table tr:last-child td { border-bottom: none; }
+
+  .legend { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 20px; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #546e7a; }
+  .legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
+  .why-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding: 24px 28px; }
+  .why-item { display: flex; gap: 14px; align-items: flex-start; }
+  .why-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+  .why-title { font-size: 13px; font-weight: 700; color: #1a1a2e; margin-bottom: 4px; }
+  .why-text { font-size: 12px; color: #546e7a; line-height: 1.6; }
+
+  .arc-step { display: flex; align-items: center; gap: 10px; }
+  .arc-num { width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; }
+  .arc-row { flex: 1; border-radius: 6px; padding: 8px 12px; display: flex; justify-content: space-between; align-items: center; }
+  .arc-title { font-size: 12px; font-weight: 700; }
+  .arc-sub { font-size: 11px; margin-top: 2px; }
+  .arc-label { font-size: 10px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; white-space: nowrap; margin-left: 12px; }
+  .arc-connector { width: 26px; text-align: center; font-size: 14px; color: #D3D1C7; line-height: 1; }
+
+  .three-tests { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+  .test-card { border-radius: 6px; padding: 10px 12px; }
+  .test-title { font-size: 11px; font-weight: 700; margin-bottom: 3px; }
+  .test-text { font-size: 11px; line-height: 1.4; }
+
+  @media (max-width: 640px) {
+    .prompt-grid, .stage, .feedback-grid, .why-grid, .three-tests { grid-template-columns: 1fr; }
+  }
+
+  /* ── TAB NAV ── */
+  .tab-nav { display: flex; gap: 0; border-bottom: 2px solid #e4e7ec; margin-bottom: 32px; overflow-x: auto; }
+  .tab-btn { padding: 12px 20px; font-size: 13px; font-weight: 600; color: #78909c; background: transparent; border: none; border-bottom: 3px solid transparent; cursor: pointer; font-family: inherit; white-space: nowrap; margin-bottom: -2px; transition: all .15s; }
+  .tab-btn:hover { color: #1a1a2e; }
+  .tab-btn.active { color: #7c3aed; border-bottom-color: #7c3aed; }
+  .tab-pane { display: none; }
+  .tab-pane.active { display: block; }
+
+  /* ── TRACKER ── */
+  .tracker-team { background: white; border-radius: 10px; border: 1px solid #e4e7ec; margin-bottom: 16px; overflow: hidden; }
+  .tracker-team-header { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; border-bottom: 1px solid #f0f2f5; cursor: pointer; }
+  .tracker-team-name { font-size: 14px; font-weight: 700; color: #1a1a2e; }
+  .tracker-meta { font-size: 12px; color: #78909c; }
+  .tracker-pct { font-size: 18px; font-weight: 800; color: #7c3aed; font-family: "Iowan Old Style", Georgia, serif; }
+  .tracker-bar-wrap { height: 4px; background: #f0f2f5; }
+  .tracker-bar-fill { height: 100%; background: #7c3aed; transition: width .4s; }
+  .tracker-sections { padding: 12px 20px 16px; display: flex; flex-direction: column; gap: 6px; }
+  .tracker-row { display: flex; align-items: center; gap: 10px; font-size: 12px; }
+  .tracker-row-label { flex: 1; color: #546e7a; }
+  .tracker-status { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 999px; white-space: nowrap; }
+  .ts-locked { background: #f1f5f9; color: #94a3b8; }
+  .ts-notstarted { background: #f8f9fb; color: #b0bec5; }
+  .ts-inprogress { background: #fef3c7; color: #92400e; }
+  .ts-ready { background: #dbeafe; color: #1e40af; }
+  .ts-approved { background: #dcfce7; color: #166534; }
+  .tracker-sign-off { display: flex; gap: 8px; padding: 0 20px 16px; }
+  .sign-off-chip { font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 999px; }
+  .soc-pending { background: #fef2f2; color: #991b1b; }
+  .soc-done { background: #dcfce7; color: #166534; }
+  .tracker-intro { background: white; border-radius: 10px; border: 1px solid #e4e7ec; padding: 20px 24px; margin-bottom: 24px; }
+  .tracker-intro p { font-size: 13px; color: #546e7a; line-height: 1.65; }
+  .tracker-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 24px; }
+  .tracker-stat { background: white; border: 1px solid #e4e7ec; border-radius: 8px; padding: 16px; text-align: center; }
+  .tracker-stat-val { font-size: 1.8rem; font-weight: 800; color: #1a1a2e; font-family: "Iowan Old Style", Georgia, serif; line-height: 1; }
+  .tracker-stat-lbl { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: #90a4ae; margin-top: 4px; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="eyebrow">Data &amp; Analytics Platform · Zone Leadership</div>
+    <h1>Zone Strategic Plan<br>Backbone Framework</h1>
+    <p>A consistent structure for all zone strategic plans, covering the plan itself, the story that brings it to life, and the process for rehearsing it until the team is ready for the real room.</p>
+  </div>
+
+  <!-- TAB NAV -->
+  <div class="tab-nav">
+    <button class="tab-btn active">Progress Tracker</button>
+  </div>
+
+  <!-- TRACKER CONTENT -->
+  <div>
+
+    <div style="background:#f0f9ff;border-left:4px solid #0284c7;border-radius:0 8px 8px 0;padding:14px 20px;margin-bottom:20px">
+      <p style="font-size:13px;color:#0c4a6e;line-height:1.6;margin:0"><strong>Manager view — do not share this URL with employees.</strong> This dashboard shows live section progress, session summaries, and open items for every employee. Updated each morning at 9:30am from the latest session data.</p>
+    </div>
+
+    <div class="tracker-intro">
+      <p>Track where each employee stands across all 9 sections (Section 0 through 8). Employees work through sections at their own pace — managers can check in on the HTML site or tracker at any time. Status updates automatically each morning from the latest session data.</p>
+    </div>
+
+    <div class="tracker-stats">
+      <div class="tracker-stat"><div class="tracker-stat-val" id="stat-employees">—</div><div class="tracker-stat-lbl">Employees</div></div>
+      <div class="tracker-stat"><div class="tracker-stat-val" id="stat-s0">—</div><div class="tracker-stat-lbl">North Star Complete</div></div>
+      <div class="tracker-stat"><div class="tracker-stat-val" id="stat-complete">—</div><div class="tracker-stat-lbl">Sections Approved</div></div>
+      <div class="tracker-stat"><div class="tracker-stat-val" id="stat-ready">—</div><div class="tracker-stat-lbl">Stage 3 Ready</div></div>
+    </div>
+
+    <div id="tracker-employees"></div>
+
+    <div style="margin-top:24px;background:white;border-radius:10px;border:1px solid #e4e7ec;padding:20px 24px;">
+      <div style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#90a4ae;margin-bottom:12px;">Status Key</div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;">
+        <span class="tracker-status ts-notstarted" style="font-size:12px;padding:4px 12px;">Not Started</span>
+        <span class="tracker-status ts-inprogress" style="font-size:12px;padding:4px 12px;">In Progress</span>
+        <span class="tracker-status ts-ready" style="font-size:12px;padding:4px 12px;">Ready — awaiting review</span>
+        <span class="tracker-status ts-approved" style="font-size:12px;padding:4px 12px;">Approved</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div style="text-align:center;padding:24px;font-size:12px;color:#90a4ae;">Data &amp; Analytics Platform · athenahealth · Manager Dashboard · 2026</div>
+
+</div>
+<script>
+// ── Tracker — load from tracker-data/manifest.json ──────────────────────────
+const SECTIONS = [
+  '00. North Star & Business Case',
+  '01. Strategic Context',
+  '02. Who We Serve',
+  '03. Strategic Focus Areas',
+  '04. Investment & Capacity',
+  '05. Roadmap & Phasing',
+  '06. Success Metrics',
+  '07. Risks, Dependencies & Asks',
+  '08. OKR Status'
+];
+
+function statusClass(s) {
+  if (s === 'approved') return 'ts-approved';
+  if (s === 'ready') return 'ts-ready';
+  if (s === 'in_progress') return 'ts-inprogress';
+  if (s === 'locked') return 'ts-locked';
+  return 'ts-notstarted';
+}
+function statusLabel(s) {
+  if (s === 'approved') return 'Approved';
+  if (s === 'ready') return 'Ready — awaiting review';
+  if (s === 'in_progress') return 'In Progress';
+  if (s === 'locked') return 'Not Started';
+  return 'Not Started';
+}
+
+function renderTracker(manifest) {
+  const cohort = manifest.cohort || [];
+  const container = document.getElementById('tracker-employees');
+
+  // Stats
+  const s0locked = cohort.filter(e => e.sections && e.sections['00'] === 'approved').length;
+  const totalSections = cohort.reduce((n, e) => n + (e.sections ? Object.values(e.sections).filter(v => v === 'approved').length : 0), 0);
+  const stage3ready = cohort.filter(e => e.stage3_ready).length;
+  document.getElementById('stat-employees').textContent = cohort.length || '0';
+  document.getElementById('stat-s0').textContent = s0locked;
+  document.getElementById('stat-complete').textContent = totalSections;
+  document.getElementById('stat-ready').textContent = stage3ready;
+
+  if (cohort.length === 0) {
+    container.innerHTML = '<div style="background:#f8f9fb;border:1px dashed #d1d5db;border-radius:10px;padding:32px;text-align:center;color:#90a4ae"><div style="font-size:14px;font-weight:600;margin-bottom:6px">No employees yet</div><div style="font-size:13px">Employee cards appear here once they begin their first session.</div></div>';
+    return;
+  }
+
+  container.innerHTML = cohort.map(function(e) {
+    const sections = e.sections || {};
+    const approved = Object.values(sections).filter(v => v === 'approved').length;
+    const pct = Math.round((approved / 9) * 100);
+    const sectionRows = SECTIONS.map(function(label, i) {
+      const key = String(i).padStart(2, '0');
+      const status = sections[key] || 'not_started';
+      return '<div class="tracker-row"><span class="tracker-row-label">' + label + '</span><span class="tracker-status ' + statusClass(status) + '">' + statusLabel(status) + '</span></div>';
+    }).join('');
+
+    const lastSession = e.last_session_date ? '<span style="font-size:12px;color:#90a4ae">Last session: ' + e.last_session_date + '</span>' : '';
+    const summaryLine = e.summary_line ? '<div style="font-size:12px;color:#546e7a;margin-top:4px;font-style:italic">' + e.summary_line + '</div>' : '';
+
+    return '<div class="tracker-team" style="margin-bottom:20px">' +
+      '<div class="tracker-team-header">' +
+        '<div>' +
+          '<div class="tracker-team-name">' + e.name + '</div>' +
+          '<div class="tracker-meta">' + e.role + ' · Manager: ' + e.manager + '</div>' +
+          summaryLine +
+        '</div>' +
+        '<div style="text-align:right">' +
+          '<div class="tracker-pct">' + pct + '%</div>' +
+          lastSession +
+        '</div>' +
+      '</div>' +
+      '<div class="tracker-bar-wrap"><div class="tracker-bar-fill" style="width:' + pct + '%"></div></div>' +
+      '<div class="tracker-sections">' + sectionRows + '</div>' +
+    '</div>';
+  }).join('');
+}
+
+fetch('tracker-data/manifest.json')
+  .then(function(r) { return r.json(); })
+  .then(renderTracker)
+  .catch(function() {
+    document.getElementById('tracker-employees').innerHTML = '<div style="background:#f8f9fb;border:1px dashed #d1d5db;border-radius:10px;padding:32px;text-align:center;color:#90a4ae"><div style="font-size:13px">Tracker data unavailable — run a session to generate it.</div></div>';
+  });
+</script>
+</body>
+</html>
